@@ -289,8 +289,46 @@ public final class BundleLoader {
         while ((read = input.read(buffer)) >= 0) { total += read; if (total > limit) throw new IOException("File exceeds limit"); output.write(buffer, 0, read); }
         return output.toByteArray();
     }
-    private int compareSemver(String a, String b) {
-        try { for (int i = 0; i < 3; i++) { int av = Integer.parseInt(a.split("[-+]", 2)[0].split("\\.")[i]); int bv = Integer.parseInt(b.split("[-+]", 2)[0].split("\\.")[i]); if (av != bv) return Integer.compare(av, bv); } } catch (Exception ignored) { }
+    /**
+     * SemVer 2.0.0 precedence: build metadata (+...) is ignored, a pre-release
+     * (-alpha.3, -beta.1, -rc.1) is lower than the matching release, and
+     * pre-release identifiers are compared field by field (numeric fields
+     * numerically, others lexically; numeric < alphanumeric; shorter prefix is lower).
+     * Example: 1.0.0-alpha.3 < 1.0.0-beta.1 < 1.0.0-beta.2 < 1.0.0-beta.10 < 1.0.0-rc.1 < 1.0.0 < 1.1.0
+     */
+    static int compareSemver(String a, String b) {
+        try {
+            String av = a.trim(), bv = b.trim();
+            int plusA = av.indexOf('+'); if (plusA >= 0) av = av.substring(0, plusA);
+            int plusB = bv.indexOf('+'); if (plusB >= 0) bv = bv.substring(0, plusB);
+            int dashA = av.indexOf('-'), dashB = bv.indexOf('-');
+            String coreA = dashA >= 0 ? av.substring(0, dashA) : av;
+            String coreB = dashB >= 0 ? bv.substring(0, dashB) : bv;
+            String preA = dashA >= 0 ? av.substring(dashA + 1) : null;
+            String preB = dashB >= 0 ? bv.substring(dashB + 1) : null;
+            String[] partsA = coreA.split("\\."), partsB = coreB.split("\\.");
+            for (int i = 0; i < 3; i++) {
+                long x = i < partsA.length ? Long.parseLong(partsA[i]) : 0;
+                long y = i < partsB.length ? Long.parseLong(partsB[i]) : 0;
+                if (x != y) return Long.compare(x, y);
+            }
+            if (preA == null && preB == null) return 0;
+            if (preA == null) return 1;
+            if (preB == null) return -1;
+            String[] idsA = preA.split("\\."), idsB = preB.split("\\.");
+            int n = Math.min(idsA.length, idsB.length);
+            for (int i = 0; i < n; i++) {
+                String x = idsA[i], y = idsB[i];
+                boolean xNum = x.matches("\\d+"), yNum = y.matches("\\d+");
+                int cmp;
+                if (xNum && yNum) cmp = new java.math.BigInteger(x).compareTo(new java.math.BigInteger(y));
+                else if (xNum) cmp = -1;
+                else if (yNum) cmp = 1;
+                else cmp = x.compareTo(y);
+                if (cmp != 0) return cmp;
+            }
+            return Integer.compare(idsA.length, idsB.length);
+        } catch (Exception ignored) { }
         return 0;
     }
 }
