@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "id": "universal-emotes",
+  "version": "${version}",
+  "name": "Universal Emotes",
+  "description": "An Emote system featuring a detailed bundle system, a developer & user-friendly interface, and support for an advanced event system.",
+  "authors": ["ptah"],
+  "license": "MIT",
+  "environment": "*",
+  "contact": {
+    "sources": "https://github.com/theptah/universal-emotes",
+    "issues": "https://github.com/theptah/universal-emotes/issues",
+    "homepage": "https://modrinth.com/user/ptah"
+  },
+  "mixins": [
+    "universal-emotes.mixins.json"
+  ],
+  "entrypoints": {
+    "main": [
+      "com.ptah.UniversalEmotesMod"
+    ],
+    "client": [
+      "com.ptah.client.UniversalEmotesClient"
+    ],
+    "modmenu": [
+      "com.ptah.client.config.UniversalEmotesModMenu"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.14.21",
+    "minecraft": "${minecraft}",
+    "java": ">=${java}",
+    "fabric-api": "*"
+  },
+  "suggests": {
+    "cloth-config2": "*",
+    "modmenu": "*"
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.ptah.client.mixin",
+  "compatibilityLevel": "${java}",
+  "client": [
+    "CameraZoomMixin",
+    "CameraHeadFollowMixin",
+    "HandRenderMixin",
+    "SelfRenderMixin",
+    "HumanoidModelMixin",
+    "ModelPartMixin",
+    "CubeDataMixin",
+    "SoundManagerAccessor",
+    "SoundEngineAccessor",
+    "ChannelAccessor",
+    "AbstractClientPlayerMixin",
+    "AgeableModelRenderMixin",
+    "ArmorVisibilityMixin",
+    "ItemInHandVisibilityMixin",
+    "HeldItemPoseMixin",
+    //? if >=1.21.6
+    /*"GuiGraphicsPreviewMixin",*/
+    //? if >=1.21.2 {
+    /*"LivingEntityRenderStateMixin",
+    "LivingEntityRendererMixin",
+    *///?} else
+    "ArmorBendSuppressMixin",
+    "CapeLayerMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

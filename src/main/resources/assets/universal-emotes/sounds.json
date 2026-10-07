@@ -1,0 +1,26 @@
+{
+  "ui_hover": {
+    "category": "master",
+    "sounds": [
+      "universal-emotes:ui_hover"
+    ]
+  },
+  "ui_favorite": {
+    "category": "master",
+    "sounds": [
+      "universal-emotes:ui_favorite"
+    ]
+  },
+  "ui_unfavorite": {
+    "category": "master",
+    "sounds": [
+      "universal-emotes:ui_unfavorite"
+    ]
+  },
+  "ui_alert": {
+    "category": "master",
+    "sounds": [
+      "universal-emotes:ui_alert"
+    ]
+  }
+}
